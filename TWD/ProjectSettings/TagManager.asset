@@ -6,6 +6,8 @@ TagManager:
   tags:
   - tower
   - enemy
+  - border
+  - noplace
   layers:
   - Default
   - TransparentFX

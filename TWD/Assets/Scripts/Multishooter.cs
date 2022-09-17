@@ -39,7 +39,12 @@ public class Multishooter : tower
         if (placed)
         {
             if (target && shootTimer >= getfireRate()){
-                Instantiate(ammo,shootPoint.position,body.transform.rotation);
+                Quaternion rotate = body.transform.rotation;
+                Instantiate(ammo, shootPoint.position, rotate * Quaternion.Euler(0, 0, 30));
+                Instantiate(ammo, shootPoint.position, rotate * Quaternion.Euler(0, 0, 15));
+                Instantiate(ammo, shootPoint.position, rotate);
+                Instantiate(ammo, shootPoint.position, rotate * Quaternion.Euler(0, 0, -15));
+                Instantiate(ammo, shootPoint.position, rotate * Quaternion.Euler(0, 0, -30));
                 shootTimer = 0;
                 Debug.Log("shoot");
             }

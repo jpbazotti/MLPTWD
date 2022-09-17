@@ -40,7 +40,10 @@ public abstract class tower : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        shootTimer += Time.deltaTime;
+        if (placed)
+        {
+            shootTimer += Time.deltaTime;
+        }
     }
     public void setfireRate(float fireRate)
     {
