@@ -10,8 +10,11 @@ public class Player : MonoBehaviour
     private tower currentTowerScript;
     public GameObject tower1;
     public GameObject tower2;
-    public int range1;
-    public int range2;
+    public float range1;
+    public float range2;
+    public float fireRate1;
+    public float fireRate2;
+
     int money;
     // Start is called before the first frame update
     void Start()
@@ -34,7 +37,8 @@ public class Player : MonoBehaviour
             currentTower= Instantiate(tower1);
             currentTowerScript = currentTower.GetComponent<Multishooter>();
             currentTowerScript.setColor(Color.blue);
-            currentTowerScript.setRange(10);
+            currentTowerScript.setRange(range1);
+            currentTowerScript.setfireRate(fireRate1);
 
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -47,7 +51,8 @@ public class Player : MonoBehaviour
             currentTower = Instantiate(tower2);
             currentTowerScript=currentTower.GetComponent<FastShooter>();
             currentTowerScript.setColor(Color.red);
-            currentTowerScript.setRange(5);
+            currentTowerScript.setRange(range2);
+            currentTowerScript.setfireRate(fireRate2);
         }
         if (hasTower)
         {

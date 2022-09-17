@@ -11,31 +11,36 @@ public abstract class tower : MonoBehaviour
     protected Rigidbody2D body;
     protected bool placed;
     protected Transform shootPoint;
-    private bool intersect;
+    private int intersect;
     protected float range;
+    protected GameObject target;
+    public GameObject ammo;
+    protected float shootTimer;
     // Start is called before the first frame update
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
-        shootPoint = GetComponentInChildren<Transform>();
+        shootPoint = body.transform.GetChild(0);
         setfireRate(1);
         setangle(0);
         setPlaced(false);
         setColor(Color.white);
-        intersect = false;
-
+        intersect = 0;
+        target = null;
+        shootTimer = 0;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         track();
         shoot();
         sprite.color = color;
-        if (intersect && placed)
+        if (intersect>0 && placed)
         {
             Destroy(gameObject);
         }
+        shootTimer += Time.deltaTime;
     }
     public void setfireRate(float fireRate)
     {
@@ -86,26 +91,25 @@ public abstract class tower : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<tower>().getPlaced())
             {
-                intersect = true;
+                intersect +=1;
             }
-        }
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "tower")
+        }else if (collision.gameObject.tag == "noplace")
         {
-            if (collision.gameObject.GetComponent<tower>().getPlaced())
-                intersect = true;
+            intersect += 1;
         }
-
     }
+
+   
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "tower")
         {
             if (collision.gameObject.GetComponent<tower>().getPlaced())
-                intersect = false;
+                intersect -=1;
+        }
+        else if (collision.gameObject.tag == "noplace")
+        {
+            intersect -= 1;
         }
 
     }

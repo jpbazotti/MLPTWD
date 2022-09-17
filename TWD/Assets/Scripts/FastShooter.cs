@@ -9,11 +9,11 @@ public class FastShooter : tower
     {
         if (placed)
         {
-            if (placed)
+            float minDistance = 100000;
+            GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
+            target = null;
+            if (enemies.Length > 0)
             {
-                GameObject target = null;
-                float minDistance = 100000;
-                GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
                 foreach (GameObject enemy in enemies)
                 {
                     float distance = Vector3.Distance(body.transform.position, enemy.transform.position);
@@ -23,15 +23,24 @@ public class FastShooter : tower
                         target = enemy;
                     }
                 }
-                Vector3 dir = body.transform.position - target.transform.position;
-                body.transform.rotation = Quaternion.LookRotation(dir);
+                if (target)
+                {
+                    Vector3 dir = body.transform.position - target.transform.position;
+                    dir.Normalize();
+
+                    float rotation = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                    body.transform.rotation = Quaternion.Euler(0f, 0f, rotation);
+                }
             }
         }
     }
     override public void shoot()
     {
-        if (placed)
+        if (target && shootTimer >= getfireRate())
         {
+            Instantiate(ammo, shootPoint.position, body.transform.rotation);
+            shootTimer = 0;
+            Debug.Log("shoot");
         }
     }
 
