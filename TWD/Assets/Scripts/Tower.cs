@@ -8,16 +8,22 @@ public abstract class tower : MonoBehaviour
     private Color color;
     public SpriteRenderer sprite;
     private float angle;
-    private Rigidbody2D body;
-    private bool placed;
-
+    protected Rigidbody2D body;
+    protected bool placed;
+    protected Transform shootPoint;
+    private bool intersect;
+    protected float range;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+        shootPoint = GetComponentInChildren<Transform>();
         setfireRate(1);
         setangle(0);
+        setPlaced(false);
         setColor(Color.white);
+        intersect = false;
+
     }
 
     // Update is called once per frame
@@ -26,6 +32,10 @@ public abstract class tower : MonoBehaviour
         track();
         shoot();
         sprite.color = color;
+        if (intersect && placed)
+        {
+            Destroy(gameObject);
+        }
     }
     public void setfireRate(float fireRate)
     {
@@ -44,10 +54,6 @@ public abstract class tower : MonoBehaviour
         return angle;
     }
 
-    public Color getColor()
-    {
-        return color;
-    }
     public void setColor(Color color)
     {
         this.color = color;
@@ -57,14 +63,50 @@ public abstract class tower : MonoBehaviour
     {
         this.placed = placed;
     }
+
+    public void setRange(float range)
+    {
+       this.range=range;
+    }
+    public float getRange()
+    {
+        return range;
+    }
+
+    public bool getPlaced()
+    {
+        return placed;
+    }
     public abstract void track();
     public abstract void shoot();
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (!placed)
+        if (collision.gameObject.tag == "tower")
         {
-            Destroy(this);
+            if (collision.gameObject.GetComponent<tower>().getPlaced())
+            {
+                intersect = true;
+            }
         }
+    }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "tower")
+        {
+            if (collision.gameObject.GetComponent<tower>().getPlaced())
+                intersect = true;
+        }
+
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "tower")
+        {
+            if (collision.gameObject.GetComponent<tower>().getPlaced())
+                intersect = false;
+        }
+
     }
 }
