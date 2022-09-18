@@ -16,6 +16,7 @@ public abstract class tower : MonoBehaviour
     protected GameObject target;
     public GameObject ammo;
     protected float shootTimer;
+    private int price;
     // Start is called before the first frame update
     void Awake()
     {
@@ -38,6 +39,7 @@ public abstract class tower : MonoBehaviour
         sprite.color = color;
         if (intersect>0 && placed)
         {
+            FindObjectOfType<Player>().getMoney(price);
             Destroy(gameObject);
         }
         if (placed)
@@ -84,6 +86,15 @@ public abstract class tower : MonoBehaviour
     public bool getPlaced()
     {
         return placed;
+    }
+
+    public int getPrice()
+    {
+        return price;
+    }
+    public void setPrice(int price)
+    {
+        this.price = price;
     }
     public abstract void track();
     public abstract void shoot();

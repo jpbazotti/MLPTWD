@@ -1,19 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     private bool hasTower;
-    private int life;
     private GameObject currentTower;
     private tower currentTowerScript;
+    private TextMeshProUGUI lifeTextContent;
+    private TextMeshProUGUI moneyTextContent;
+    private TextMeshProUGUI gameOverTextContent;
+
     public GameObject tower1;
     public GameObject tower2;
+    public int life;
+    public int price1;
+    public int price2;
+    public int startMoney;
     public float range1;
     public float range2;
     public float fireRate1;
     public float fireRate2;
+    public GameObject lifeText;
+    public GameObject moneyText;
+    public GameObject gameOverText;
+
 
     int money;
     // Start is called before the first frame update
@@ -21,70 +34,101 @@ public class Player : MonoBehaviour
     {
         life = 100;
         hasTower = false;
-        money = 0;
+        money = startMoney;
+        lifeTextContent = lifeText.GetComponent<TextMeshProUGUI>();
+        moneyTextContent = moneyText.GetComponent<TextMeshProUGUI>();
+        gameOverTextContent = gameOverText.GetComponent<TextMeshProUGUI>();
+        lifeTextContent.SetText("{0}", life);
+        moneyTextContent.SetText("{0}", money);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (life > 0)
         {
-            if (hasTower)
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                Destroy(currentTower);
-            }
-            hasTower = true;
-            currentTower= Instantiate(tower1);
-            currentTowerScript = currentTower.GetComponent<Multishooter>();
-            currentTowerScript.setColor(Color.blue);
-            currentTowerScript.setRange(range1);
-            currentTowerScript.setfireRate(fireRate1);
+                if (hasTower)
+                {
+                    Destroy(currentTower);
+                }
+                hasTower = true;
+                currentTower = Instantiate(tower1);
+                currentTowerScript = currentTower.GetComponent<Multishooter>();
+                currentTowerScript.setColor(Color.blue);
+                currentTowerScript.setRange(range1);
+                currentTowerScript.setfireRate(fireRate1);
+                currentTowerScript.setPrice(price1);
 
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                if (hasTower)
+                {
+                    Destroy(currentTower);
+                }
+                hasTower = true;
+                currentTower = Instantiate(tower2);
+                currentTowerScript = currentTower.GetComponent<FastShooter>();
+                currentTowerScript.setColor(Color.red);
+                currentTowerScript.setRange(range2);
+                currentTowerScript.setfireRate(fireRate2);
+                currentTowerScript.setPrice(price2);
+            }
             if (hasTower)
             {
-                Destroy(currentTower);
+                if (currentTower)
+                {
+                    Vector3 worldpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    currentTower.transform.position = new Vector3(worldpos.x, worldpos.y, 0);
+                }
+                else
+                {
+                    currentTowerScript = null;
+                    currentTower = null;
+                    hasTower = false;
+                }
+
             }
-            hasTower = true;
-            currentTower = Instantiate(tower2);
-            currentTowerScript=currentTower.GetComponent<FastShooter>();
-            currentTowerScript.setColor(Color.red);
-            currentTowerScript.setRange(range2);
-            currentTowerScript.setfireRate(fireRate2);
-        }
-        if (hasTower)
-        {
-            if (currentTower)
+            if (hasTower && Input.GetKeyDown(KeyCode.Mouse0) && money >= currentTowerScript.getPrice())
             {
-                Vector3 worldpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                currentTower.transform.position = new Vector3(worldpos.x, worldpos.y, 0);
-            }
-            else
-            {
+                money -= currentTowerScript.getPrice();
+                moneyTextContent.SetText("{0}", money);
+                currentTowerScript.setPlaced(true);
                 currentTowerScript = null;
                 currentTower = null;
                 hasTower = false;
+
             }
-
         }
-        if (hasTower && Input.GetKeyDown(KeyCode.Mouse0))
+        else
         {
-            currentTowerScript.setPlaced(true);
-            currentTowerScript = null;
-            currentTower= null;
-            hasTower = false;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-        }
-
-        if(life < 100)
-        {
-            gameOver();
+            }
         }
     }
     private void gameOver()
     {
-        Debug.Log("Game Over");
+        gameOverTextContent.SetText("Game Over\n press space to restart");
+
+    }
+    public void getMoney(int price)
+    {
+        money += price;
+        moneyTextContent.SetText("{0}", money);
+    }
+
+    public void receiveDamage(int damage)
+    {
+        life -= damage;
+        lifeTextContent.SetText("{0}", life);
+        if(life <= 0)
+        {
+            gameOver();
+        }
     }
 }

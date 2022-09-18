@@ -46,7 +46,6 @@ public class Multishooter : tower
                 Instantiate(ammo, shootPoint.position, rotate * Quaternion.Euler(0, 0, -15));
                 Instantiate(ammo, shootPoint.position, rotate * Quaternion.Euler(0, 0, -30));
                 shootTimer = 0;
-                Debug.Log("shoot");
             }
         }
     }

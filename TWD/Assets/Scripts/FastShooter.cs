@@ -40,7 +40,6 @@ public class FastShooter : tower
         {
             Instantiate(ammo, shootPoint.position, body.transform.rotation);
             shootTimer = 0;
-            Debug.Log("shoot");
         }
     }
 

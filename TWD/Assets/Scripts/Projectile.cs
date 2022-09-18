@@ -18,18 +18,10 @@ public class Projectile : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "enemy")
-        {
-            Destroy(collision.gameObject);
-            Destroy(gameObject);
-            Debug.Log("destroyed");
-
-        }
-        if (collision.gameObject.tag == "border")
+        if (collision.gameObject.tag == "enemy" || collision.gameObject.tag=="border")
         {
             Destroy(gameObject);
 
         }
-
     }
 }
