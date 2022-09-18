@@ -9,7 +9,7 @@ public class Multishooter : tower
     {
         if (placed)
         {
-            float maxDistance = 0;
+            float minDistance = 100000;
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
             target = null;
             if (enemies.Length > 0)
@@ -17,9 +17,9 @@ public class Multishooter : tower
                 foreach (GameObject enemy in enemies)
                 {
                     float distance = Vector3.Distance(body.transform.position, enemy.transform.position);
-                    if (distance < range && distance > maxDistance)
+                    if (distance < range && distance < minDistance)
                     {
-                        maxDistance = distance;
+                        minDistance = distance;
                         target = enemy;
                     }
                 }

@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     private TextMeshProUGUI lifeTextContent;
     private TextMeshProUGUI moneyTextContent;
     private TextMeshProUGUI gameOverTextContent;
+    private SpriteRenderer radius;
 
     public GameObject tower1;
     public GameObject tower2;
@@ -28,6 +29,7 @@ public class Player : MonoBehaviour
     public GameObject gameOverText;
 
 
+
     int money;
     // Start is called before the first frame update
     void Start()
@@ -40,6 +42,8 @@ public class Player : MonoBehaviour
         gameOverTextContent = gameOverText.GetComponent<TextMeshProUGUI>();
         lifeTextContent.SetText("{0}", life);
         moneyTextContent.SetText("{0}", money);
+        radius = GetComponent<SpriteRenderer>();
+        radius.enabled=false;
     }
 
     // Update is called once per frame
@@ -47,8 +51,11 @@ public class Player : MonoBehaviour
     {
         if (life > 0)
         {
+            Vector3 worldpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            gameObject.transform.position = new Vector3(worldpos.x, worldpos.y, 0);
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
+                radius.enabled = true;
                 if (hasTower)
                 {
                     Destroy(currentTower);
@@ -60,10 +67,12 @@ public class Player : MonoBehaviour
                 currentTowerScript.setRange(range1);
                 currentTowerScript.setfireRate(fireRate1);
                 currentTowerScript.setPrice(price1);
+                gameObject.transform.localScale = new Vector3(range1*2, range1 * 2, 1);
 
             }
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
+                radius.enabled = true;
                 if (hasTower)
                 {
                     Destroy(currentTower);
@@ -75,12 +84,12 @@ public class Player : MonoBehaviour
                 currentTowerScript.setRange(range2);
                 currentTowerScript.setfireRate(fireRate2);
                 currentTowerScript.setPrice(price2);
+                gameObject.transform.localScale = new Vector3(range2 * 2, range2 * 2, 1);
             }
             if (hasTower)
             {
                 if (currentTower)
                 {
-                    Vector3 worldpos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     currentTower.transform.position = new Vector3(worldpos.x, worldpos.y, 0);
                 }
                 else
@@ -99,7 +108,7 @@ public class Player : MonoBehaviour
                 currentTowerScript = null;
                 currentTower = null;
                 hasTower = false;
-
+                radius.enabled = false;
             }
         }
         else
