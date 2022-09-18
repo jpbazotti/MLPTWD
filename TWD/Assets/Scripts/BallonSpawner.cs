@@ -22,9 +22,9 @@ public class BallonSpawner : MonoBehaviour
         if (timer >= spawnrate)
         {
             timer = 0;
-            Instantiate(Ballon, spawnpointers[0].transform);
-            Instantiate(Ballon, spawnpointers[1].transform);
-            Instantiate(Ballon, spawnpointers[2].transform);
+            Instantiate(Ballon, spawnpointers[0].transform.position,Quaternion.identity);
+            Instantiate(Ballon, spawnpointers[1].transform.position, Quaternion.identity);
+            Instantiate(Ballon, spawnpointers[2].transform.position, Quaternion.identity);
         }
     }
 }
