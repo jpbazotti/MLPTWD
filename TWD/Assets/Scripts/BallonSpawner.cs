@@ -27,12 +27,14 @@ public class BallonSpawner : MonoBehaviour
         ypath2 = xpath2.Select(script.move_y_sin);
         ypath3 = f(0, spawnpointers[2].transform.position.y, script.move_y_linear);
         timer = 0;
+        spawnrate = 4;
     }
 
     // Update is called once per frame
     void Update()
     {
         timer = timer + Time.deltaTime;
+
 
         if (timer >= spawnrate)
         {
@@ -48,6 +50,11 @@ public class BallonSpawner : MonoBehaviour
             GameObject b3 = Instantiate(ballon, spawnpointers[2].transform.position, Quaternion.identity);
             b3.GetComponent<Ballon>().allPosX = xpath3;
             b3.GetComponent<Ballon>().allPosY = ypath3;
+            spawnrate -= 15*Time.deltaTime;
+            if (spawnrate < 0.3f)
+            {
+                spawnrate = 0.3f;
+            }
         }
     }
 }
