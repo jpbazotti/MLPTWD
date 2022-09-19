@@ -7,17 +7,18 @@ public class Ballon : MonoBehaviour
 {
     private bool pop;
     public Func<float, float> move_x_linear = x => x + 0.05f;
+    public Func<float, float> move_x_linear_neg = x => x - 0.05f;
     public Func<float, float> move_y_sin = x => MathF.Sin(x - 0.4f);
     public Func<float, float> move_y_linear = x =>x;
 
     int curPosition;
     public IEnumerable<float> allPosX;
     public IEnumerable<float> allPosY;
-    public Func<int, float, Func<float, float>, IEnumerable<float>> movementList()
+    public Func<int,int, float, Func<float, float>, IEnumerable<float>> movementList()
     {
-        Func<int, float, Func<float, float>, IEnumerable<float>> move = null;
-        move = (it, pos,function)=> it == 0 ? new List<float> {pos}.Concat(move(it + 1, function(pos), function)):
-                    it < 1000? new List<float> {pos}.Concat(move(it + 1, function(pos), function)) :
+        Func<int, int,float, Func<float, float>, IEnumerable<float>> move = null;
+        move = (it,size,pos,function)=> it == 0 ? new List<float> {pos}.Concat(move(it + 1, size,function(pos), function)):
+                    it < size ? new List<float> {pos}.Concat(move(it + 1, size,function(pos), function)) :
                     new List<float> {};
         return move;
     }
@@ -53,7 +54,7 @@ public class Ballon : MonoBehaviour
             if (!pop)
             {
                 pop = true;
-                FindObjectOfType<Player>().getMoney(10);
+                FindObjectOfType<Player>().getMoney(5);
                 Destroy(gameObject);
             }
         }

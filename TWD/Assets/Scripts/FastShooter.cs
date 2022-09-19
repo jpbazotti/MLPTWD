@@ -9,7 +9,7 @@ public class FastShooter : tower
     {
         if (placed)
         {
-            float minDistance = 100000;
+            float maxDistance = 0;
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("enemy");
             target = null;
             if (enemies.Length > 0)
@@ -17,9 +17,9 @@ public class FastShooter : tower
                 foreach (GameObject enemy in enemies)
                 {
                     float distance = Vector3.Distance(body.transform.position, enemy.transform.position);
-                    if (distance < range && distance < minDistance)
+                    if (distance < range && distance > maxDistance)
                     {
-                        minDistance = distance;
+                        maxDistance = distance;
                         target = enemy;
                     }
                 }

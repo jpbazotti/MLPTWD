@@ -12,6 +12,8 @@ public class BallonSpawner : MonoBehaviour
     IEnumerable<float> ypath1;
     IEnumerable<float> xpath2;
     IEnumerable<float> ypath2;
+    IEnumerable<float>[] xpath3Partial;
+    IEnumerable<float>[] ypath3Partial;
     IEnumerable<float> xpath3;
     IEnumerable<float> ypath3;
     // Start is called before the first frame update
@@ -19,13 +21,59 @@ public class BallonSpawner : MonoBehaviour
     {
         Ballon script =ballon.GetComponent<Ballon>();
         var f = script.movementList();
-        xpath1 = f(0, spawnpointers[0].transform.position.x, script.move_x_linear);
-        xpath2 = f(0, spawnpointers[1].transform.position.x, script.move_x_linear);
-        xpath3 = f(0, spawnpointers[2].transform.position.x, script.move_x_linear);
-
-        ypath1 = f(0, spawnpointers[0].transform.position.y, script.move_y_linear);
+        xpath1 = f(0,1000,spawnpointers[0].transform.position.x, script.move_x_linear);
+        ypath1 = f(0, 1000,spawnpointers[0].transform.position.y, script.move_y_linear);
+        xpath2 = f(0, 1000,spawnpointers[1].transform.position.x, script.move_x_linear);
         ypath2 = xpath2.Select(script.move_y_sin);
-        ypath3 = f(0, spawnpointers[2].transform.position.y, script.move_y_linear);
+        xpath3Partial = new IEnumerable<float>[7];
+        ypath3Partial = new IEnumerable<float>[7];
+        xpath3= new List<float> { };
+        ypath3= new List<float> { };
+        float offsetX = 0;
+        float offsetY = 0;
+        int stepsizeX = 95;
+        int stepsizeY = 40;
+        for (int i =0; i<7; i+=2)
+        {
+            if (i == 2 || i==6)
+            {
+                offsetY = -stepsizeY * 0.05f;
+            }
+            else
+            {
+                offsetY = 0;
+            }
+            xpath3Partial[i] = f(0, stepsizeX, spawnpointers[2].transform.position.x+offsetX, script.move_x_linear);
+            ypath3Partial[i] = f(0, stepsizeX, spawnpointers[2].transform.position.y+ offsetY, script.move_y_linear);
+            offsetX += stepsizeX * 0.05f;
+            stepsizeX = 90;
+
+        }
+        stepsizeX = 95;
+        offsetX = stepsizeX * 0.05f;
+        for (int i = 1; i < 7; i += 2)
+        {
+            if (i == 3)
+            {
+                offsetY = -stepsizeY * 0.05f;
+            }
+            else
+            {
+                offsetY = 0;
+            }
+            ypath3Partial[i] = f(0, stepsizeY, spawnpointers[2].transform.position.y+offsetY, i==3? script.move_x_linear: script.move_x_linear_neg);
+            xpath3Partial[i] = f(0, stepsizeY, spawnpointers[2].transform.position.x+offsetX, script.move_y_linear);
+            stepsizeX = 90;
+            offsetX += stepsizeX * 0.05f;
+           
+        }
+
+        for (int i = 0; i < 7; i ++)
+        {
+            xpath3 = xpath3.Concat(xpath3Partial[i]);
+            ypath3 = ypath3.Concat(ypath3Partial[i]);
+
+        }
         timer = 0;
         spawnrate = 4;
     }
