@@ -98,10 +98,10 @@ public class BallonSpawner : MonoBehaviour
             GameObject b3 = Instantiate(ballon, spawnpointers[2].transform.position, Quaternion.identity);
             b3.GetComponent<Ballon>().allPosX = xpath3;
             b3.GetComponent<Ballon>().allPosY = ypath3;
-            spawnrate -= 15*Time.deltaTime;
-            if (spawnrate < 0.3f)
+            spawnrate -= 0.1f;
+            if (spawnrate < 0.5f)
             {
-                spawnrate = 0.3f;
+                spawnrate = 0.5f;
             }
         }
     }
