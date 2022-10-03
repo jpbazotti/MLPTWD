@@ -7,7 +7,6 @@ public abstract class tower : MonoBehaviour
     private float fireRate;
     private Color color;
     public SpriteRenderer sprite;
-    private float angle;
     protected Rigidbody2D body;
     protected bool placed;
     protected Transform shootPoint;
@@ -23,7 +22,6 @@ public abstract class tower : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         shootPoint = body.transform.GetChild(0);
         setfireRate(1);
-        setangle(0);
         setPlaced(false);
         setColor(Color.white);
         intersect = 0;
@@ -31,7 +29,6 @@ public abstract class tower : MonoBehaviour
         shootTimer = 0;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         track();
@@ -47,47 +44,35 @@ public abstract class tower : MonoBehaviour
             shootTimer += Time.deltaTime;
         }
     }
-    public void setfireRate(float fireRate)
-    {
-        this.fireRate = fireRate;
-    }
+
     public float getfireRate()
     {
         return fireRate;
     }
-    public void setangle(float angle)
+    public void setfireRate(float fireRate)
     {
-        this.angle=angle;
+        this.fireRate = fireRate;
     }
-    public float getangle()
-    {
-        return angle;
-    }
-
     public void setColor(Color color)
     {
         this.color = color;
-    }
-
-    public void setPlaced(bool placed)
-    {
-        this.placed = placed;
-    }
-
-    public void setRange(float range)
-    {
-       this.range=range;
     }
     public float getRange()
     {
         return range;
     }
-
+    public void setRange(float range)
+    {
+       this.range=range;
+    }
     public bool getPlaced()
     {
         return placed;
     }
-
+    public void setPlaced(bool placed)
+    {
+        this.placed = placed;
+    }
     public int getPrice()
     {
         return price;

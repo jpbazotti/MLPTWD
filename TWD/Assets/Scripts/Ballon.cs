@@ -17,7 +17,7 @@ public class Ballon : MonoBehaviour
     public Func<int,int, float, Func<float, float>, IEnumerable<float>> movementList()
     {
         Func<int, int,float, Func<float, float>, IEnumerable<float>> move = null;
-        move = (it,size,pos,function)=> it == 0 ? new List<float> {pos}.Concat(move(it + 1, size,function(pos), function)):
+        move = (it,size,pos,function)=> 
                     it < size ? new List<float> {pos}.Concat(move(it + 1, size,function(pos), function)) :
                     new List<float> {};
         return move;
